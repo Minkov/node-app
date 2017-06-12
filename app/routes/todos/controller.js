@@ -23,8 +23,6 @@ const getController = (data) => {
         },
         create(req, res) {
             let todo = req.body;
-            console.log('-'.repeat(50));
-            console.log(todo);
 
             if (!isValid(todo)) {
                 return res.redirect(400, '/form');

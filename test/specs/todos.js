@@ -31,7 +31,6 @@ describe('Form test', () => {
             })
             .then(() => {
                 server.close(done);
-                done();
             });
     });
 
