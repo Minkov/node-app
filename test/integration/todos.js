@@ -51,7 +51,7 @@ describe('Test 1', () => {
 
     it('Simple WRONG post', (done) => {
         request(app)
-            .post('/')
+            .post('/todos')
             .type('form')
             .expect(400)
             .end((err, res) => {
@@ -62,12 +62,12 @@ describe('Test 1', () => {
 
     it('Simple post', (done) => {
         request(app)
-            .post('/')
+            .post('/todos')
             .type('form')
             .send({
                 text: 'It works',
             })
-            .expect(201)
+            .expect(302)
             .end((err, res) => {
                 if (err) return done(err);
                 done();

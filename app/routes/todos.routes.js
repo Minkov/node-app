@@ -1,54 +1,46 @@
 const { Router } = require('express');
 
-const { ObjectID } = require('mongodb');
-
 const isValid = (item) => {
     return typeof item !== 'undefined' &&
         typeof item.text === 'string';
 };
 
 module.exports = {
-    initRouter(db) {
+    initRouter(data) {
         const router = new Router();
 
         router
             .get('/', (req, res) => {
-                db.collection('items')
-                    .find({})
-                    .toArray()
-                    .then((items) => {
-                        items = items.map((item) => {
-                            item.id = item._id;
-                            return item;
-                        });
-                        return res.render('all', {
-                            context: items,
+                return data.getAll()
+                    .then((todos) => {
+                        return res.render('todos/all', {
+                            context: todos,
                         });
                     });
             })
             .get('/form', (req, res) => {
-                return res.render('form');
+                return res.render('todos/form');
             })
             .get('/:id', (req, res) => {
-                db.collection('items')
-                    .findOne({ _id: new ObjectID(req.params.id) })
-                    .then((item) => {
-                        return res.render('details', {
-                            context: item,
+                data.getById(req.params.id)
+                    .then((todo) => {
+                        return res.render('todos/details', {
+                            context: todo,
                         });
                     });
             })
             .post('/', (req, res) => {
-                let item = req.body;
-                console.log(item);
-                if (!isValid(item)) {
+                let todo = req.body;
+                console.log('-'.repeat(50));
+                console.log(todo);
+
+                if (!isValid(todo)) {
                     return res.redirect(400, '/form');
                 }
 
-                db.collection('items')
-                    .insert(item)
+                data.create(todo.text)
                     .then((result) => {
-                        res.redirect(201, '/' + item._id);
+                        res.redirect('/todos/' + result.id);
                     });
             });
         return router;

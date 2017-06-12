@@ -1,4 +1,5 @@
 const { expect } = require('chai');
+
 const { MongoClient } = require('mongodb');
 
 const { getApp } = require('../../app/app');
@@ -34,19 +35,34 @@ describe('Form test', () => {
             });
     });
 
+    const select = (selector) => {
+        browser.waitForExist(selector);
+        return $(selector);
+    };
+
+    const click = (selector) => {
+        select(selector)
+            .click();
+    };
+
     it('Should create an element', () => {
         const text = 'It works!';
 
-        browser.url(url + '/form');
-
-        const tbText = $('#tb-text');
-        tbText.setValue(text);
-
-        browser.click('#btn-save');
-
         browser.url(url);
-        const item = $('a');
 
-        expect(item.getText()).to.eq(text);
+        click('#nav-btn-todos');
+
+        click('#btn-subnav-create');
+
+        select('#tb-text')
+            .setValue(text);
+
+        click('#btn-save');
+
+        const h1 = select('h1');
+        const check = select('*[type=checkbox]');
+        expect(check.isSelected()).to.equal(false);
+
+        expect(h1.getText()).to.eq(text);
     });
 });

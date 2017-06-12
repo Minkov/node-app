@@ -1,0 +1,7 @@
+extends _shared/_base
+
+block content
+    form(action="/todos" method="POST")
+        input#tb-text(name="text" placeholder="Enter text")
+        button#btn-save
+            | Save

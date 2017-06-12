@@ -1,0 +1,8 @@
+extends _shared/_base
+
+block content
+    ul
+        for item in context
+            li
+                a(href="/todos/" + item.id)
+                    =item.text
