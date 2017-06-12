@@ -8,7 +8,7 @@
     "dev": "nodemon server.js",
     "test": "npm run lint && npm run unit_tests && npm run integration_tests && npm run browser_tests",
     "lint": "./node_modules/.bin/eslint . --fix",
-    "unit_tests": "./node_modules/.bin/mocha test/unit",
+    "unit_tests": "./node_modules/.bin/mocha test/unit/**/*.js",
     "integration_tests": "./node_modules/.bin/mocha test/integration",
     "browser_tests": "./node_modules/.bin/wdio wdio.conf.js"
   },
@@ -27,6 +27,8 @@
     "eslint-config-google": "^0.8.0",
     "mocha": "^3.4.2",
     "nodemon": "^1.11.0",
+    "sinon": "^2.3.4",
+    "sinon-chai": "^2.11.0",
     "supertest": "^3.0.0",
     "wdio-mocha-framework": "^0.5.10",
     "wdio-spec-reporter": "^0.1.0",

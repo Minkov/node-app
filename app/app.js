@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 
 const { getData } = require('./data/todos.data');
 
-const { initRouter } = require('./routes/todos.routes');
+const { initRouter } = require('./routes/todos/router');
 
 const { connect } = require('./db');
 
