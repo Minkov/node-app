@@ -29,13 +29,14 @@ describe('TODO\'s tests', () => {
 
     const select = (selector) => {
         browser.waitForExist(selector);
+        browser.waitForEnabled(selector);
         return $(selector);
     };
 
-    // const selectByText = (text) => {
-    //     browser.waitForExist('a');
-    //     return browser.getText('=' + text);
-    // };
+    const selectByText = (text) => {
+        browser.waitForExist('*=' + text);
+        return browser.element('*=' + text);
+    };
 
     const click = (selector) => {
         select(selector)
@@ -43,7 +44,7 @@ describe('TODO\'s tests', () => {
     };
 
     const clickByText = (text) => {
-        browser.element('a').click('*=' + text);
+        selectByText(text).click();
     };
 
     const createTODO = (text) => {
@@ -77,6 +78,7 @@ describe('TODO\'s tests', () => {
 
             click('#nav-btn-todos');
             click('#btn-subnav-all');
+
             clickByText(text);
 
             const h1 = select('h1');
