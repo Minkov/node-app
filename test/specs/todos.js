@@ -10,13 +10,14 @@ describe('TODO\'s tests', () => {
     const url = 'http://localhost:' + port;
     let server = null;
     let app = null;
-    const connectionString = 'mongodb://localhost/test-db';
+    const connectionString = 'mongodb://localhost/test-db-' + parseInt(Math.random() * 100);
 
     beforeEach((done) => {
         getApp({ connectionString })
             .then((_app) => app = _app)
             .then(() => app.listen(port, done))
-            .then((_server) => server = _server);
+            .then((_server) => server = _server)
+            .then(() => browser.url(url));
     });
 
     afterEach((done) => {
@@ -31,11 +32,33 @@ describe('TODO\'s tests', () => {
         browser.waitForExist(selector);
         browser.waitForEnabled(selector);
         return $(selector);
+    }
+
+    const waitSeconds = (seconds) => {
+        return new Promise((resolve) => {
+            setTimeout(resolve, seconds * 1000);
+        });
     };
 
     const selectByText = (text) => {
-        browser.waitForExist('*=' + text);
-        return browser.element('*=' + text);
+        return new Promise((resolve) => {
+            const f = () => {
+                try {
+                    browser.waitForExist('=' + text);
+                    const element = $('=' + text);
+                    const text = element.getText();
+
+                    return resolve(element);
+                } catch (err) {
+                    return waitSeconds(0.1)
+                        .then(f)
+                        .then(resolve);
+                }
+            };
+
+            f(resolve);
+            // setTimeout(f, 100);
+        });
     };
 
     const click = (selector) => {
@@ -44,7 +67,8 @@ describe('TODO\'s tests', () => {
     };
 
     const clickByText = (text) => {
-        selectByText(text).click();
+        return selectByText(text)
+            .then((element) => element.click());
     };
 
     const createTODO = (text) => {
@@ -52,40 +76,84 @@ describe('TODO\'s tests', () => {
         click('#btn-subnav-create');
         select('#tb-text')
             .setValue(text);
-
         click('#btn-save');
     };
 
-    describe('expect creating a TODO', () => {
-        it('to redirect to TODO details', () => {
-            const text = 'It works!';
-            browser.url(url);
+    // describe('expect creating a TODO', () => {
+    //     it('to redirect to TODO details', () => {
+    //         const text = 'It works!';
 
-            createTODO(text);
+    //         createTODO(text);
 
-            const h1 = select('h1');
-            const check = select('*[type=checkbox]');
+    //         const h1 = select('h1');
+    //         const check = select('*[type=checkbox]');
 
-            expect(h1.getText()).to.eq(text);
-            expect(check.isSelected()).to.equal(false);
-        });
-    });
+    //         expect(h1.getText()).to.eq(text);
+    //         expect(check.isSelected()).to.equal(false);
+    //     });
+    // });
 
-    describe('expect clicking on a TODO', () => {
-        it('to redirect to TODO details', (done) => {
-            const text = 'Sample TODO';
-            createTODO(text);
+    describe('expect todos to be listed', () => {
+        it('when they are created', (done) => {
+            const count = 1;
+            const texts = Array.from({ length: count })
+                .map((_, i) => 'Todo' + (i + 1));
+
+            texts.forEach((text) => createTODO(text));
 
             click('#nav-btn-todos');
             click('#btn-subnav-all');
 
-            clickByText(text);
-
-            const h1 = select('h1');
-            const check = select('*[type=checkbox]');
-            expect(check.isSelected()).to.equal(false);
-
-            expect(h1.getText()).to.eq(text);
+            Promise.all(
+                texts.map(
+                    (text) => {
+                        console.log(' --- HERE ---');
+                        return selectByText(text)
+                            .then((a) => a.getText() + 1);
+                    }
+                ))
+                .then((elTexts) => {
+                    expect(elTexts).to.eq(texts);
+                })
+                .catch(done);
         });
     });
+
+    // describe('expect clicking on a TODO', () => {
+    //     it('to redirect to TODO details', (done) => {
+    //         const text = 'SampleTODO';
+    //         createTODO(text);
+
+    //         click('#nav-btn-todos');
+    //         click('#btn-subnav-all');
+
+    //         clickByText(text)
+    //             .then(() => {
+    //                 const h1 = select('h1');
+    //                 const check = select('*[type=checkbox]');
+    //                 expect(check.isSelected()).to.equal(false);
+
+    //                 expect(h1.getText()).to.eq(text);
+    //             })
+    //             .then(done);
+    //     });
+
+    //     it('to redirect to TODO details, when many todos', (done) => {
+    //         const text = 'SampleTODO';
+    //         createTODO('ANOTHERTODO');
+    //         createTODO(text);
+
+    //         click('#nav-btn-todos');
+    //         click('#btn-subnav-all');
+
+    //         clickByText(text)
+    //             .then(() => {
+    //                 const h1 = select('h1');
+    //                 const check = select('*[type=checkbox]');
+    //                 expect(check.isSelected()).to.equal(false);
+
+    //                 expect(h1.getText()).to.eq(text);
+    //             });
+    //     });
+    // });
 });
