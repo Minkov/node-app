@@ -4,7 +4,10 @@ const { MongoClient } = require('mongodb');
 
 const { getApp } = require('../../app/app');
 
-describe.skip('TODO\'s tests', () => {
+const ui = require('./shared/ui.utils');
+const authUtils = require('./shared/auth.utils');
+
+describe('TODO\'s tests', () => {
     // get random port in range [3000, 4000)
     let port = null;
     let url = null;
@@ -20,6 +23,9 @@ describe.skip('TODO\'s tests', () => {
             .then(() => app.listen(port))
             .then((_server) => server = _server)
             .then(() => browser.url(url))
+            .then(() => ui.setBrowser(browser))
+            .then(() => authUtils.signUpUser('Coki', 'Skoki'))
+            .then(() => authUtils.signInUser('Coki', 'Skoki'))
             .then(done);
     });
 
@@ -31,42 +37,13 @@ describe.skip('TODO\'s tests', () => {
             .then(() => server.close(done));
     });
 
-    const waitFor = (selector) => {
-        try {
-            browser.waitForExist(selector);
-            // browser.waitForVisible(selector);
-            browser.getText(selector);
-            return Promise.resolve();
-        } catch (err) {
-            return waitFor(selector);
-        }
-    };
-
-    const getText = (selector) => {
-        return Promise.resolve()
-            .then(() => waitFor(selector))
-            .then(() => browser.getText(selector));
-    };
-
-    const setValue = (selector, value) => {
-        return Promise.resolve()
-            .then(() => waitFor(selector))
-            .then(() => browser.setValue(selector, value));
-    };
-
-    const click = (selector) => {
-        return Promise.resolve()
-            .then(() => waitFor(selector))
-            .then(() => browser.click(selector));
-    };
-
     const createTODO = (text) => {
         return Promise.resolve()
-            .then(() => click('#nav-btn-todos'))
-            .then(() => click('#btn-subnav-create'))
-            .then(() => waitFor('#tb-text'))
-            .then(() => setValue('#tb-text', text))
-            .then(() => click('#btn-save'));
+            .then(() => ui.click('#nav-btn-todos'))
+            .then(() => ui.click('#btn-subnav-create'))
+            .then(() => ui.waitFor('#tb-text'))
+            .then(() => ui.setValue('#tb-text', text))
+            .then(() => ui.click('#btn-save'));
     };
 
     describe('expect creating a TODO', () => {
@@ -76,10 +53,10 @@ describe.skip('TODO\'s tests', () => {
             return Promise.resolve()
                 .then(() => createTODO(text))
                 .then(() => Promise.all([
-                    waitFor('*[type=checkbox]')
+                    ui.waitFor('*[type=checkbox]')
                         .then(() => browser.isSelected('*[type=checkbox]')),
-                    waitFor('h1')
-                        .then(() => getText('h1')),
+                    ui.waitFor('h1')
+                        .then(() => ui.getText('h1')),
                 ]))
                 .then(([isSelected, elText]) => {
                     expect(isSelected).to.equal(false);
@@ -99,9 +76,9 @@ describe.skip('TODO\'s tests', () => {
 
             return Promise.resolve()
                 .then(() => todoPromomises)
-                .then(() => click('#nav-btn-todos'))
-                .then(() => click('#btn-subnav-all'))
-                .then(() => getText('.todo-item'))
+                .then(() => ui.click('#nav-btn-todos'))
+                .then(() => ui.click('#btn-subnav-all'))
+                .then(() => ui.getText('.todo-item'))
                 .then((elTexts) => {
                     expect(elTexts).to.eql(texts);
                 });
@@ -113,14 +90,14 @@ describe.skip('TODO\'s tests', () => {
             const text = 'SampleTODO';
             return Promise.resolve()
                 .then(() => createTODO(text))
-                .then(() => click('#nav-btn-todos'))
-                .then(() => click('#btn-subnav-all'))
-                .then(() => click('=' + text))
+                .then(() => ui.click('#nav-btn-todos'))
+                .then(() => ui.click('#btn-subnav-all'))
+                .then(() => ui.click('=' + text))
                 .then(() => Promise.all([
-                    waitFor('*[type=checkbox]')
+                    ui.waitFor('*[type=checkbox]')
                         .then(() => browser.isSelected('*[type=checkbox]')),
-                    waitFor('h1')
-                        .then(() => getText('h1')),
+                    ui.waitFor('h1')
+                        .then(() => ui.getText('h1')),
                 ]))
                 .then(([isSelected, elText]) => {
                     expect(isSelected).to.equal(false);

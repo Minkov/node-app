@@ -1,14 +1,12 @@
-// const { expect } = require('chai');
+const { expect } = require('chai');
 
 const { MongoClient } = require('mongodb');
 
 const { getApp } = require('../../app/app');
 
-const waitSeconds = (seconds) => {
-    return new Promise((resolve) =>
-        setTimeout(resolve, seconds * 1000)
-    );
-};
+const ui = require('./shared/ui.utils');
+
+const authUtils = require('./shared/auth.utils');
 
 describe('Auth tests', () => {
     // get random port in range [3000, 4000)
@@ -26,6 +24,7 @@ describe('Auth tests', () => {
             .then(() => app.listen(port))
             .then((_server) => server = _server)
             .then(() => browser.url(url))
+            .then(() => ui.setBrowser(browser))
             .then(done);
     });
 
@@ -37,57 +36,18 @@ describe('Auth tests', () => {
             .then(() => server.close(done));
     });
 
-    const waitFor = (selector) => {
-        try {
-            browser.waitForExist(selector);
-            // browser.waitForVisible(selector);
-            browser.getText(selector);
-            return Promise.resolve();
-        } catch (err) {
-            return waitFor(selector);
-        }
-    };
-
-    // const getText = (selector) => {
-    //    return Promise.resolve()
-    //        .then(() => waitFor(selector))
-    //        .then(() => browser.getText(selector));
-    // };
-
-    const setValue = (selector, value) => {
-        return Promise.resolve()
-            .then(() => waitFor(selector))
-            .then(() => browser.setValue(selector, value));
-    };
-
-    const click = (selector) => {
-        return Promise.resolve()
-            .then(() => waitFor(selector))
-            .then(() => browser.click(selector));
-    };
-
-    const signUpUser = (username, password) => {
-        return Promise.resolve()
-            .then(() => click('=' + 'Sign up'))
-            .then(() => setValue('*[name=username]', username))
-            .then(() => setValue('*[name=username]', password))
-            .then(() => click('button'));
-    };
-
-    const signInUser = (username, password) => {
-        return Promise.resolve()
-            .then(() => click('=' + 'Sign in'))
-            .then(() => setValue('*[name=username]', username))
-            .then(() => setValue('*[name=username]', password))
-            .then(() => click('button'));
-    };
-
     describe('Sign up user', () => {
         it('should create', () => {
+            const username = 'Coki';
+            const password = 'Sk0k1';
             return Promise.resolve()
-                .then(() => signUpUser('Coki', 'Skoki'))
-                .then(() => signInUser('Coki', 'Skoki'))
-                .then(() => waitSeconds(2));
+                .then(() => authUtils.signUpUser(username, password))
+                .then(() => authUtils.signInUser(username, password))
+                .then(() => ui.waitFor('=' + username))
+                .then(() => ui.getText('=' + username))
+                .then((text) => {
+                    expect(text).to.eql(username);
+                });
         });
     });
 });

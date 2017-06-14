@@ -4,6 +4,8 @@ const { MongoClient } = require('mongodb');
 
 const { getApp } = require('../../app/app');
 
+const { expect } = require('chai');
+
 describe('Test 1', () => {
     let app = null;
     const connectionString = 'mongodb://localhost/test-db';
@@ -22,14 +24,14 @@ describe('Test 1', () => {
             .then((collections) => {
                 collections.forEach((collection) => {
                     collection.remove({});
-                });
+                }); 401;
             })
             .then(() => {
                 done();
             });
     });
 
-    it('simple get', (done) => {
+    it('Simple get', (done) => {
         request(app)
             .get('/')
             .expect(200)
@@ -39,28 +41,7 @@ describe('Test 1', () => {
             });
     });
 
-    it('simple get', (done) => {
-        request(app)
-            .get('/')
-            .expect(200)
-            .end((err, res) => {
-                if (err) return done(err);
-                done();
-            });
-    });
-
-    it.skip('Simple WRONG post', (done) => {
-        request(app)
-            .post('/todos')
-            .type('form')
-            .expect(400)
-            .end((err, res) => {
-                if (err) return done(err);
-                done();
-            });
-    });
-
-    it.skip('Simple post', (done) => {
+    it('Simple post', (done) => {
         request(app)
             .post('/todos')
             .type('form')
@@ -69,6 +50,7 @@ describe('Test 1', () => {
             })
             .expect(302)
             .end((err, res) => {
+                expect(res.text).to.contain('/auth/sign-in');
                 if (err) return done(err);
                 done();
             });

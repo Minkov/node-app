@@ -13,7 +13,7 @@ module.exports = {
             })
             .get('/form', (req, res) => {
                 if (!req.user) {
-                    return res.redirect('/auth/sign-up');
+                    return res.redirect('/auth/sign-in');
                 }
 
                 return res.render('todos/form');
@@ -23,7 +23,7 @@ module.exports = {
             })
             .post('/', (req, res) => {
                 if (!req.user) {
-                    return res.redirect('/auth/sign-up');
+                    return res.redirect('/auth/sign-in');
                 }
 
                 return controller.create(req, res);

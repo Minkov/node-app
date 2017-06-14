@@ -40,4 +40,10 @@ module.exports = (app, data, secret) => {
                 done(null, user);
             }).catch(done);
     });
+    app.use((req, res, next) => {
+        res.locals = {
+            user: req.user,
+        };
+        next();
+    });
 };

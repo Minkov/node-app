@@ -25,7 +25,11 @@ module.exports = {
                     failureRedirect: '/sign-in',
                     failureFlash: true,
                 })
-            );
+            )
+            .get('/sign-out', (req, res) => {
+                req.logout();
+                res.redirect('/');
+            });
         return router;
     },
 };
