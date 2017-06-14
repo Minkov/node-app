@@ -1,0 +1,8 @@
+extends ../_shared/_base
+
+block body
+    form(action="/auth/sign-up" method="POST")
+        input(name="username" )
+        input(name="password" type="password")
+        button
+            | Sign Up

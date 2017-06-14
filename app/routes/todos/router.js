@@ -12,12 +12,20 @@ module.exports = {
                 return controller.getAll(req, res);
             })
             .get('/form', (req, res) => {
+                if (!req.user) {
+                    return res.redirect('/auth/sign-up');
+                }
+
                 return res.render('todos/form');
             })
             .get('/:id', (req, res) => {
                 return controller.getDetails(req, res);
             })
             .post('/', (req, res) => {
+                if (!req.user) {
+                    return res.redirect('/auth/sign-up');
+                }
+
                 return controller.create(req, res);
             });
         return router;

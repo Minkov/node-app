@@ -1,11 +1,17 @@
+const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 
-const { getData } = require('./data/todos.data');
+const getTodosData = require('./data/todos.data').getData;
+const getAuthData = require('./data/auth.data').getData;
 
-const { initRouter } = require('./routes/todos/router');
+const initTodosRouter = require('./routes/todos/router').initRouter;
+const initAuthRouter = require('./routes/auth/router').initRouter;
 
 const { connect } = require('./db');
+
+const flash = require('connect-flash');
 
 module.exports = {
     getApp(config) {
@@ -14,15 +20,25 @@ module.exports = {
         app.set('view engine', 'pug');
         app.use(bodyParser.urlencoded({ extended: false }));
 
+        app.use('/static', express.static(path.join(__dirname, 'static')));
+        app.use(cookieParser());
+        app.use(flash());
+
         return connect(config.connectionString)
             .then((db) => {
-                const todosData = getData(db);
-                const router = initRouter(todosData);
+                const todosData = getTodosData(db);
+                const authData = getAuthData(db);
+                require('./auth')(app, authData, 'Purple Unicorn');
+                const todosRouter = initTodosRouter(todosData);
+                const usersRouter = initAuthRouter(authData);
 
-                app.use('/todos', router);
+                app.use('/todos', todosRouter);
+                app.use('/auth', usersRouter);
 
                 app.use('/', (req, res) => res.render('home'));
                 return app;
+            })
+            .catch((err) => {
             });
     },
 };

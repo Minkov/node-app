@@ -49,7 +49,7 @@ describe('Test 1', () => {
             });
     });
 
-    it('Simple WRONG post', (done) => {
+    it.skip('Simple WRONG post', (done) => {
         request(app)
             .post('/todos')
             .type('form')
@@ -60,7 +60,7 @@ describe('Test 1', () => {
             });
     });
 
-    it('Simple post', (done) => {
+    it.skip('Simple post', (done) => {
         request(app)
             .post('/todos')
             .type('form')

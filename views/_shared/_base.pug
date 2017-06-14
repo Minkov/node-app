@@ -3,6 +3,7 @@ html(lang="en")
 head
     meta(charset="UTF-8")
     title Document
+    link(rel="stylesheet", href="/static/css/app.css")
 body
     .container
         .row
@@ -12,6 +13,12 @@ body
                         li
                             a#nav-btn-todos(href="/todos")
                                 | TODOs
+                        li
+                            a(href='/auth/sign-up')
+                                | Sign up
+                        li
+                            a(href='/auth/sign-in')
+                                | Sign in
         .row
             .col-xs-12
                 block body
