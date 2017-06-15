@@ -1,11 +1,11 @@
 extends ../../_shared/_base
 
 block body
-    ul
-        li
+    ul.subnav.list
+        li.nav-item
             a#btn-subnav-all(href="/todos")
                 | All
-        li
+        li.nav-item
             a#btn-subnav-create(href="/todos/form")
                 | Add
     block content

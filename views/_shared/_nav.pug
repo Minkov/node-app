@@ -1,0 +1,35 @@
+mixin nav(user)
+    nav
+        ul.nav
+            li.has-dropdown
+                a.toggle(href="#")
+                    | TODOs
+                .dropdown.hidden
+                    ul.list
+                        li
+                            a(href="/todos")
+                                | All
+                        li
+                            a(href="/todos/form")
+                                | Create
+            if user
+                li.has-dropdown
+                    a.toggle(href="#")
+                        =user.username
+                    .dropdown.hidden
+                        ul.list
+                            li
+                                a(href="/auth/sign-out")
+                                    | Sign out
+            else
+                li.has-dropdown
+                    a.toggle(href="#")
+                        | User
+                    .dropdown.hidden
+                        ul.list
+                            li
+                                a(href='/auth/sign-in')
+                                    | Sign in
+                            li
+                                a(href='/auth/sign-up')
+                                    | Sign up

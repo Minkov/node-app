@@ -2,7 +2,7 @@ extends ../_shared/_base
 
 block body
     form(action="/auth/sign-up" method="POST")
-        input(name="username" )
-        input(name="password" type="password")
-        button
+        input.form-control(name="username", placeholder="Enter username")
+        input.form-control(name="password", type="text", placeholder="Enter password")
+        button.btn.btn-success
             | Sign Up

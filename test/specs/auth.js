@@ -1,6 +1,7 @@
-const { expect } = require('chai');
+const os = require('os');
+const path = require('path');
 
-const { MongoClient } = require('mongodb');
+const { expect } = require('chai');
 
 const { getApp } = require('../../app/app');
 
@@ -8,18 +9,28 @@ const ui = require('./shared/ui.utils');
 
 const authUtils = require('./shared/auth.utils');
 
+const dbUtils = require('./shared/db.utils');
+
 describe('Auth tests', () => {
-    // get random port in range [3000, 4000)
     let port = null;
     let url = null;
-    let server = null;
     let app = null;
-    const connectionString = 'mongodb://localhost/test-db-' + parseInt(Math.random() * 100);
+    let server = null;
+    const connectionString =
+        'mongodb://localhost/test-db-' + parseInt(Math.random() * 100);
+    const logsDirectory =
+        path.join(os.tmpdir(), 'app-selenium-logs' + Math.random());
 
     beforeEach((done) => {
+        // get random port in range [3000, 4000)
         port = parseInt(Math.random() * 1000 + 3000);
+        // port = 3001;
         url = 'http://localhost:' + port;
-        return getApp({ connectionString })
+        return Promise.resolve()
+            .then(() => getApp({
+                connectionString,
+                logsDirectory,
+            }))
             .then((_app) => app = _app)
             .then(() => app.listen(port))
             .then((_server) => server = _server)
@@ -29,21 +40,18 @@ describe('Auth tests', () => {
     });
 
     afterEach((done) => {
-        MongoClient.connect(connectionString)
-            .then((db) => db.collections())
-            .then((collections) =>
-                collections.forEach((collection) => collection.remove({})))
+        return Promise.resolve()
+            .then(() => dbUtils.cleanUp(connectionString))
             .then(() => server.close(done));
     });
 
     describe('Sign up user', () => {
         it('should create', () => {
-            const username = 'Coki';
+            const username = 'Coki' + parseInt(Math.random() * 1000);
             const password = 'Sk0k1';
             return Promise.resolve()
                 .then(() => authUtils.signUpUser(username, password))
                 .then(() => authUtils.signInUser(username, password))
-                .then(() => ui.waitFor('=' + username))
                 .then(() => ui.getText('=' + username))
                 .then((text) => {
                     expect(text).to.eql(username);

@@ -67,3 +67,8 @@ nav {
 .has-dropdown .dropdown li {
     font-size: 12px
 }
+
+.subnav .nav-item {
+    display: inline-block;
+    margin-left: 15px            
+}

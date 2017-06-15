@@ -2,6 +2,6 @@ extends _shared/_base
 
 block content
     form(action="/todos" method="POST")
-        input#tb-text(name="text" placeholder="Enter text")
-        button#btn-save
+        input.form-control(name="text" placeholder="Enter text")
+        button.btn.btn-success
             | Save

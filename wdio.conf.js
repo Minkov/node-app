@@ -14,7 +14,7 @@ exports.config = {
     ],
     // Patterns to exclude.
     exclude: [
-        // 'path/to/excluded/files'
+        './test/specs/shared/**/*.js',
     ],
     //
     // ============
@@ -41,7 +41,7 @@ exports.config = {
     capabilities: [
     {
         maxInstances: 5,
-        browserName: 'firefox',
+        browserName: 'chrome',
     }],
     //
     // ===================

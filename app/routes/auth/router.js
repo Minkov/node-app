@@ -22,7 +22,7 @@ module.exports = {
             .post('/sign-in', passport.authenticate('local',
                 {
                     successRedirect: '/',
-                    failureRedirect: '/sign-in',
+                    failureRedirect: '/auth/sign-in',
                     failureFlash: true,
                 })
             )

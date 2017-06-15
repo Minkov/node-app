@@ -4,20 +4,20 @@ const ui = require('./ui.utils');
 
 const signUpUser = (username, password) => {
     return Promise.resolve()
-        .then(() => ui.click('=' + 'User'))
-        .then(() => ui.click('=' + 'Sign up'))
-        .then(() => ui.setValue('*[name*=username]', username))
-        .then(() => ui.setValue('*[name*=password]', password))
-        .then(() => ui.click('button'));
+        .then(() => ui.click('a=User'))
+        .then(() => ui.click('a=Sign up'))
+        .then(() => ui.setValue('input[name="username"]', username))
+        .then(() => ui.setValue('input[name="password"]', password))
+        .then(() => ui.click('.btn'));
 };
 
 const signInUser = (username, password) => {
     return Promise.resolve()
-        .then(() => ui.click('=' + 'User'))
-        .then(() => ui.click('=' + 'Sign in'))
-        .then(() => ui.setValue('*[name*=username]', username))
-        .then(() => ui.setValue('*[name*=password]', password))
-        .then(() => ui.click('button'));
+        .then(() => ui.click('a=User'))
+        .then(() => ui.click('a=Sign in'))
+        .then(() => ui.setValue('input[name="username"]', username))
+        .then(() => ui.setValue('input[name="password"]', password))
+        .then(() => ui.click('.btn'));
 };
 
 module.exports = {

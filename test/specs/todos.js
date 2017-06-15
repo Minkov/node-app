@@ -1,11 +1,12 @@
 const { expect } = require('chai');
 
-const { MongoClient } = require('mongodb');
-
 const { getApp } = require('../../app/app');
 
 const ui = require('./shared/ui.utils');
 const authUtils = require('./shared/auth.utils');
+const todoUtils = require('./shared/todo.utils');
+
+const dbUtils = require('./shared/db.utils');
 
 describe('TODO\'s tests', () => {
     // get random port in range [3000, 4000)
@@ -18,7 +19,8 @@ describe('TODO\'s tests', () => {
     beforeEach((done) => {
         port = parseInt(Math.random() * 1000 + 3000);
         url = 'http://localhost:' + port;
-        return getApp({ connectionString })
+        return Promise.resolve()
+            .then(() => getApp({ connectionString }))
             .then((_app) => app = _app)
             .then(() => app.listen(port))
             .then((_server) => server = _server)
@@ -30,28 +32,16 @@ describe('TODO\'s tests', () => {
     });
 
     afterEach((done) => {
-        MongoClient.connect(connectionString)
-            .then((db) => db.collections())
-            .then((collections) =>
-                collections.forEach((collection) => collection.remove({})))
+        return Promise.resolve()
+            .then(() => dbUtils.cleanUp(connectionString))
             .then(() => server.close(done));
     });
-
-    const createTODO = (text) => {
-        return Promise.resolve()
-            .then(() => ui.click('#nav-btn-todos'))
-            .then(() => ui.click('#btn-subnav-create'))
-            .then(() => ui.waitFor('#tb-text'))
-            .then(() => ui.setValue('#tb-text', text))
-            .then(() => ui.click('#btn-save'));
-    };
 
     describe('expect creating a TODO', () => {
         it('to redirect to TODO details', () => {
             const text = 'It works!';
-
             return Promise.resolve()
-                .then(() => createTODO(text))
+                .then(() => todoUtils.createTODO(text))
                 .then(() => Promise.all([
                     ui.waitFor('*[type=checkbox]')
                         .then(() => browser.isSelected('*[type=checkbox]')),
@@ -72,12 +62,12 @@ describe('TODO\'s tests', () => {
                 .map((_, index) => 'Todo ' + (index + 1));
 
             let todoPromomises = texts.reduce((p, text) =>
-                p.then(() => createTODO(text)), Promise.resolve());
+                p.then(() => todoUtils.createTODO(text)), Promise.resolve());
 
             return Promise.resolve()
                 .then(() => todoPromomises)
-                .then(() => ui.click('#nav-btn-todos'))
-                .then(() => ui.click('#btn-subnav-all'))
+                .then(() => ui.click('a=TODOs'))
+                .then(() => ui.click('a=All'))
                 .then(() => ui.getText('.todo-item'))
                 .then((elTexts) => {
                     expect(elTexts).to.eql(texts);
@@ -89,9 +79,9 @@ describe('TODO\'s tests', () => {
         it('to redirect to TODO details', () => {
             const text = 'SampleTODO';
             return Promise.resolve()
-                .then(() => createTODO(text))
-                .then(() => ui.click('#nav-btn-todos'))
-                .then(() => ui.click('#btn-subnav-all'))
+                .then(() => todoUtils.createTODO(text))
+                .then(() => ui.click('a=TODOs'))
+                .then(() => ui.click('a=All'))
                 .then(() => ui.click('=' + text))
                 .then(() => Promise.all([
                     ui.waitFor('*[type=checkbox]')
