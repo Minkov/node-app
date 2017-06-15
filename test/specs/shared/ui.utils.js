@@ -2,10 +2,13 @@ let browser = null;
 
 const waitFor = (selector) => {
     try {
-        browser.waitForExist(selector);
+        // browser.waitForExist(selector);
         // browser.waitForVisible(selector);
-        browser.getText(selector);
-        return Promise.resolve();
+        return browser.waitUntil(() => {
+            return browser.waitForExist(selector);
+        }, 5000, `Element with selector ${selector} not found`)
+            .then(() => browser.getText(selector))
+            .then(() => true);
     } catch (err) {
         return waitFor(selector);
     }
