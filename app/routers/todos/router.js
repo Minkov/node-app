@@ -5,7 +5,7 @@ const { getController } = require('./controller');
 module.exports = {
     initRouter(data) {
         const router = new Router();
-        const controller = getController(data);
+        const controller = getController(data.todos);
 
         router
             .get('/', (req, res) => {

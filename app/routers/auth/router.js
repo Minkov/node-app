@@ -14,7 +14,7 @@ module.exports = {
             })
             .post('/sign-up', (req, res) => {
                 const { username, password } = req.body;
-                return data.create(username, password)
+                return data.auth.create(username, password)
                     .then(() => {
                         res.redirect('/auth/sign-in');
                     });
