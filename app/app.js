@@ -5,11 +5,13 @@ const { bootstrapApp } = require('./bootstrap');
 
 const routers = require('./routers');
 
+const async = require('../utils/async');
+
 module.exports = {
     getApp(config) {
         const app = bootstrapApp();
 
-        return Promise.resolve()
+        return async()
             .then(() => connect(config.connectionString))
             .then((db) => {
                 const data = initData(db);

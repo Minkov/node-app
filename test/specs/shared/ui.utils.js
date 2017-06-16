@@ -1,5 +1,7 @@
 let browser = null;
 
+const async = require('../../../utils/async');
+
 const waitFor = (selector) => {
     try {
         // browser.waitForExist(selector);
@@ -15,19 +17,19 @@ const waitFor = (selector) => {
 };
 
 const getText = (selector) => {
-    return Promise.resolve()
+    return async()
         .then(() => waitFor(selector))
         .then(() => browser.getText(selector));
 };
 
 const setValue = (selector, value) => {
-    return Promise.resolve()
+    return async()
         .then(() => waitFor(selector))
         .then(() => browser.setValue(selector, value));
 };
 
 const click = (selector) => {
-    return Promise.resolve()
+    return async()
         .then(() => waitFor(selector))
         .then(() => browser.click(selector));
 };

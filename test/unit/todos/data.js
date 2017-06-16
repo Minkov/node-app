@@ -1,9 +1,11 @@
+/* eslint "no-unused-expressions": 0 */
+
 const { getData } = require('../../../app/data/todos.data');
 const sinon = require('sinon');
 
 const { expect } = require('chai');
 
-describe('TODO\' controller', () => {
+describe('TODO\' data', () => {
     let data = null;
 
     const db = {

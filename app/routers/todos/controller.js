@@ -28,7 +28,7 @@ const getController = (data) => {
                 return res.redirect(400, '/form');
             }
 
-            data.create(todo.text)
+            return data.create(todo.text)
                 .then((result) => {
                     res.redirect('/todos/' + result.id);
                 });

@@ -1,9 +1,10 @@
 let browser = null;
 
 const ui = require('./ui.utils');
+const async = require('../../../utils/async');
 
 const signUpUser = (username, password) => {
-    return Promise.resolve()
+    return async()
         .then(() => ui.click('a=User'))
         .then(() => ui.click('a=Sign up'))
         .then(() => ui.setValue('input[name="username"]', username))
@@ -12,7 +13,7 @@ const signUpUser = (username, password) => {
 };
 
 const signInUser = (username, password) => {
-    return Promise.resolve()
+    return async()
         .then(() => ui.click('a=User'))
         .then(() => ui.click('a=Sign in'))
         .then(() => ui.setValue('input[name="username"]', username))

@@ -1,7 +1,8 @@
 const { MongoClient } = require('mongodb');
+const async = require('../../utils/async');
 
 const cleanUp = (connectionString) => {
-    return Promise.resolve()
+    return async()
         .then(() => MongoClient.connect(connectionString))
         .then((db) => db.dropDatabase());
 };

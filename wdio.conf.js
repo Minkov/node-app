@@ -40,16 +40,8 @@ exports.config = {
     //
     capabilities: [
         {
-            maxInstances: 1,
+            maxInstances: 5,
             browserName: 'phantomjs',
-        },
-        {
-            maxInstances: 1,
-            browserName: 'firefox',
-        },
-        {
-            maxInstances: 1,
-            browserName: 'chrome',
         },
     ],
     //
