@@ -10,7 +10,7 @@
     "lint": "./node_modules/.bin/eslint .",
     "unit_tests": "./node_modules/.bin/mocha test/unit/**/*.js",
     "integration_tests": "./node_modules/.bin/mocha test/integration",
-    "browser_tests": "./node_modules/.bin/wdio wdio.conf.js"
+    "browser_tests": "./node_modules/.bin/mocha -R dot ./test/browser/ --timeout 10000"
   },
   "dependencies": {
     "body-parser": "^1.17.2",
@@ -25,10 +25,10 @@
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",
     "pug": "^2.0.0-rc.2",
+    "selenium-webdriver": "^3.4.0",
     "session": "^0.1.0"
   },
   "devDependencies": {
-    "@types/mongodb": "^2.2.4",
     "@types/webdriverio": "^4.7.1",
     "babel-eslint": "^7.2.3",
     "chai": "^4.0.2",

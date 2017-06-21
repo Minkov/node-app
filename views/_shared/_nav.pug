@@ -1,19 +1,19 @@
 mixin nav(user)
     nav
         ul.nav
-            li.has-dropdown
+            li#nav-todos.has-dropdown
                 a.toggle(href="#")
                     | TODOs
                 .dropdown.hidden
                     ul.list
                         li
-                            a(href="/todos")
+                            a#nav-todos-all(href="/todos")
                                 | All
                         li
-                            a(href="/todos/form")
+                            a#nav-todos-create(href="/todos/form")
                                 | Create
             if user
-                li.has-dropdown
+                li#nav-user.has-dropdown
                     a.toggle(href="#")
                         =user.username
                     .dropdown.hidden
@@ -22,14 +22,14 @@ mixin nav(user)
                                 a(href="/auth/sign-out")
                                     | Sign out
             else
-                li.has-dropdown
+                li#nav-user.has-dropdown
                     a.toggle(href="#")
                         | User
                     .dropdown.hidden
                         ul.list
                             li
-                                a(href='/auth/sign-in')
+                                a#nav-sign-in(href='/auth/sign-in')
                                     | Sign in
                             li
-                                a(href='/auth/sign-up')
+                                a#nav-sign-up(href='/auth/sign-up')
                                     | Sign up
