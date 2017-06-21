@@ -5,7 +5,7 @@ const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
-const flash = require('connect-flash');
+// const flash = require('connect-flash');
 
 const bootstrapApp = () => {
     const app = express();
@@ -17,7 +17,7 @@ const bootstrapApp = () => {
     app.use('/libs', express.static(
         path.join(__dirname, '../node_modules')));
     app.use(cookieParser());
-    app.use(flash());
+    // app.use(flash());
 
     return app;
 };

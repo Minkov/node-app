@@ -76,7 +76,7 @@ describe('TODO\'s tests', () => {
             const texts = Array.from({ length })
                 .map((_, index) => 'Todo ' + (index + 1));
 
-            let todoPromomises = texts.reduce((p, text) =>
+            const todoPromomises = texts.reduce((p, text) =>
                 p.then(() => todoUtils.createTODO(text)), async());
 
             return async()
@@ -92,7 +92,7 @@ describe('TODO\'s tests', () => {
 
     describe('expect clicking on a TODO', () => {
         it('to redirect to TODO details', () => {
-            let text = 'SampleTODO';
+            const text = 'SampleTODO';
             return async()
                 .then(() => todoUtils.createTODO(text))
                 .then(() => ui.click('a=TODOs'))

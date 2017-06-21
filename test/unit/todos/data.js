@@ -25,7 +25,7 @@ describe('TODO\' data', () => {
 
 
     const findOne = (props) => {
-        let id = props._id;
+        const id = props._id;
         const item = items.find((i) => i.id === id);
         return Promise.resolve(item || null);
     };

@@ -22,7 +22,7 @@ const getController = (data) => {
                 });
         },
         create(req, res) {
-            let todo = req.body;
+            const todo = req.body;
 
             if (!isValid(todo)) {
                 return res.redirect(400, '/form');

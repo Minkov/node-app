@@ -1,6 +1,6 @@
 /* globals __dirname */
 
-let path = require('path');
+const path = require('path');
 const fs = require('fs');
 
 const morgan = require('morgan');
