@@ -23,7 +23,7 @@ describe('Sample test', () => {
             .then(() => {
                 url = server.url;
             })
-            .then(() => setupDriver(url, 'firefox'))
+            .then(() => setupDriver(url, 'chrome'))
             .then((_driver) => {
                 driver = _driver;
             })
@@ -36,7 +36,6 @@ describe('Sample test', () => {
     });
 
     afterEach(() => {
-        // works with promise
         return driver.quit()
             .then(() => {
                 server.stop();

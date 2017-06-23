@@ -16,7 +16,8 @@ class Server {
         this.logsDirectory = path.join(os.tmpdir(), 'app-selenium-logs.log');
         this.connectionString = 'mongodb://localhost/test-db-' + getRandomNumberBetween(1, 1000);
 
-        this.port = getRandomNumberBetween(3000, 4000);
+        // this.port = getRandomNumberBetween(3000, 4000);
+        this.port = 3002;
         this.url = 'http://localhost:' + this.port;
     }
 
