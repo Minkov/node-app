@@ -17,12 +17,10 @@ const setupDriver = (url, ...browsers) => {
 
     const driver = driverBuilder.build();
 
-    // error handling - if you want do st
     process.on('uncaughtException', (err) => {
         console.log('My error handler... ' + err);
 
         if (driver) {
-            // recording screenshot
             driver.takeScreenshot()
                 .then((img) => {
                     fs.writeFileSync('/tmp/test.png',
@@ -31,7 +29,6 @@ const setupDriver = (url, ...browsers) => {
         }
     });
 
-    // open start page
     return driver;
 };
 

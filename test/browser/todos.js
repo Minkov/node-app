@@ -1,57 +1,32 @@
 const { expect } = require('chai');
 
 const async = require('../../utils/async');
-const { waitSeconds } = require('../../utils/wait');
 
 const { setupDriver } = require('./utils/setup-driver');
-
-const { Server } = require('./utils/setup-server');
 
 const ui = require('./shared/ui.utils');
 
 const authUtils = require('./shared/auth.utils');
 const todoUtils = require('./shared/todo.utils');
 
-const createServer = () => {
-    return new Server().start();
-};
-
 describe('TODO\'s tests', () => {
+    let driver = null;
+    const url = 'http://localhost:3002';
+
+    beforeEach(() => {
+        driver = setupDriver(url, 'chrome');
+
+        return driver.get(url)
+            .then(() => {
+                return ui.setDriver(driver);
+            });
+    });
+
+    afterEach(() => {
+        return driver.quit();
+    });
+
     describe('expect creating a TODO', () => {
-        let server = null;
-        let driver = null;
-        let url = null;
-
-        // run it once before tests
-        beforeEach(() => {
-            return async()
-                .then(() => {
-                    server = new Server();
-                    return server.start();
-                })
-                .then(() => {
-                    url = server.url;
-                    return url;
-                })
-                .then(() => {
-                    return setupDriver(url, 'phantomjs');
-                })
-                .then((_driver) => {
-                    driver = _driver;
-                })
-                .then(() => {
-                    return driver.get(url);
-                })
-                .then(() => {
-                    return ui.setDriver(driver);
-                });
-        });
-
-        afterEach(() => {
-            return driver.quit()
-                .then(() => server.stop());
-        });
-
         it('to redirect to TODO details', () => {
             const text = 'It works!';
             return async()
@@ -73,39 +48,6 @@ describe('TODO\'s tests', () => {
     });
 
     describe('expect todos to be listed', () => {
-        let server = null;
-        let driver = null;
-        let url = null;
-
-        // run it once before tests
-        beforeEach(() => {
-            return async()
-                .then(() => {
-                    server = new Server();
-                    return server.start();
-                })
-                .then(() => {
-                    url = server.url;
-                    return url;
-                })
-                .then(() => {
-                    return setupDriver(url, 'phantomjs');
-                })
-                .then((_driver) => {
-                    driver = _driver;
-                })
-                .then(() => {
-                    return driver.get(url);
-                })
-                .then(() => {
-                    return ui.setDriver(driver);
-                });
-        });
-
-        afterEach(() => {
-            return driver.quit()
-                .then(() => server.stop());
-        });
         it('when they are created', () => {
             const length = 5;
             const texts = Array.from({ length })
@@ -127,59 +69,33 @@ describe('TODO\'s tests', () => {
                 .then(() => ui.click('#nav-todos-all'))
                 .then(() => ui.getTexts('.todo-item'))
                 .then((elTexts) => {
-                    expect(elTexts).to.eql(texts);
+                    texts.forEach((text) => {
+                        expect(elTexts).to.include(text);
+                    });
                 });
         });
     });
 
-    describe.skip('expect clicking on a TODO', () => {
-        let server = null;
-        let driver = null;
-        let url = null;
-
-        // run it once before tests
-        beforeEach(() => {
-            return async()
-                .then(() => {
-                    server = new Server();
-                    return server.start();
-                })
-                .then(() => {
-                    url = server.url;
-                    return url;
-                })
-                .then(() => {
-                    return setupDriver(url, 'phantomjs');
-                })
-                .then((_driver) => {
-                    driver = _driver;
-                })
-                .then(() => {
-                    return driver.get(url);
-                })
-                .then(() => {
-                    return ui.setDriver(driver);
-                });
-        });
-
-        afterEach(() => {
-            return driver.quit()
-                .then(() => server.stop());
-        });
+    describe('expect clicking on a TODO', () => {
         it('to redirect to TODO details', () => {
-            const text = 'SampleTODO';
+            let text = null;
             return async()
-                .then(() => authUtils.signUpUser('C0ki', 'Sk0k1'))
-                .then(() => authUtils.signInUser('C0ki', 'Sk0k1'))
-                .then(() => todoUtils.createTODO(text))
-                .then(() => ui.click('a=TODOs'))
-                .then(() => ui.click('a=All'))
-                .then(() => ui.click('=' + text))
+                .then(() => {
+                    return async()
+                        .then(() => authUtils.signUpUser('C0ki', 'Sk0k1'))
+                        .then(() => authUtils.signInUser('C0ki', 'Sk0k1'));
+                })
+                .then(() => todoUtils.createTODO('Sample TODO'))
+                .then(() => ui.click('#nav-todos .toggle'))
+                .then(() => ui.click('#nav-todos-all'))
+                .then(() => ui.getText('.todo-item'))
+                .then((_text) => {
+                    text = _text;
+                })
+                .then(() => ui.click('.todo-item'))
                 .then(() => Promise.all([
-                    ui.waitFor('*[type=checkbox]')
-                        .then(() => driver.isSelected('*[type=checkbox]')),
-                    ui.waitFor('h1')
-                        .then(() => ui.getText('h1')),
+                        ui.getSelected('input[type="checkbox"]'),
+                        ui.getText('h1'),
                 ]))
                 .then(([isSelected, elText]) => {
                     expect(isSelected).to.equal(false);

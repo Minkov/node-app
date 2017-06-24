@@ -30,17 +30,27 @@ gulp.task('test:integration', () => {
         }));
 });
 
+const { Server } = require('./test/browser/utils/setup-server');
 gulp.task('test:browser', () => {
-    return gulp.src('./test/browser/todos.js', { read: false })
-        .pipe(mocha({
-            reporter: 'nyan',
-            timeout: 10000,
-        }));
+    const url = 'http://localhost:3001/';
+    const dbConnectionString = 'mongodb://localhost/todos-app-test';
+    const port = 3002;
+    const server = new Server(url, dbConnectionString, port);
+    gulp.on('finish', () => {
+        server.stop();
+        console.log(' --- Closed ---');
+    });
+
+    return server.start()
+        .then(() => {
+            return gulp.src('./test/browser/todos.js', { read: false })
+                .pipe(mocha({
+                    reporter: 'nyan',
+                    timeout: 10000,
+                }));
+        });
 });
 
 gulp.task('test', gulpsync.sync([
-    'lint', 'test:unit', 'test:integration', 'test:browser'
+    'lint', 'test:unit', 'test:integration', 'test:browser',
 ]));
-
-
-
