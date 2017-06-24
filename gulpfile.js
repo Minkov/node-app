@@ -43,7 +43,7 @@ gulp.task('test:browser', () => {
 
     return server.start()
         .then(() => {
-            return gulp.src('./test/browser/todos.js', { read: false })
+            return gulp.src('./test/browser/**.js', { read: false })
                 .pipe(mocha({
                     reporter: 'nyan',
                     timeout: 10000,

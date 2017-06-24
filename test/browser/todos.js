@@ -14,7 +14,7 @@ describe('TODO\'s tests', () => {
     const url = 'http://localhost:3002';
 
     beforeEach(() => {
-        driver = setupDriver(url, 'chrome');
+        driver = setupDriver(url, 'firefox', 'chrome');
 
         return driver.get(url)
             .then(() => {

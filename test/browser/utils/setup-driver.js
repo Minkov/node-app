@@ -8,7 +8,6 @@ const setupDriver = (url, ...browsers) => {
         .Builder()
         .usingServer('http://localhost:4444/wd/hub');
 
-
     browsers.forEach((browserName) =>
         driverBuilder.withCapabilities({
             browserName,

@@ -11,35 +11,20 @@ const ui = require('./shared/ui.utils');
 const authUtils = require('./shared/auth.utils');
 
 describe('Sample test', () => {
-    let server = null;
+    const url = 'http://localhost:3002';
     let driver = null;
-    let url = null;
 
-    // run it once before tests
     beforeEach(() => {
-        server = new Server();
-        return async()
-            .then(() => server.start())
+        driver = setupDriver(url, 'firefox');
+
+        return driver.get(url)
             .then(() => {
-                url = server.url;
-            })
-            .then(() => setupDriver(url, 'chrome'))
-            .then((_driver) => {
-                driver = _driver;
-            })
-            .then(() => {
-                driver.get(url);
-            })
-            .then(() => {
-                ui.setDriver(driver);
+                return ui.setDriver(driver);
             });
     });
 
     afterEach(() => {
-        return driver.quit()
-            .then(() => {
-                server.stop();
-            });
+        return driver.quit();
     });
 
     describe('Sign up user', () => {
