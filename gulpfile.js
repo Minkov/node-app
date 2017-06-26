@@ -31,19 +31,28 @@ gulp.task('test:integration', () => {
 });
 
 const { Server } = require('./test/browser/utils/setup-server');
-gulp.task('test:browser', () => {
+let server = null;
+
+gulp.task('test-server:start', () => {
     const url = 'http://localhost:3001/';
     const dbConnectionString = 'mongodb://localhost/todos-app-test';
     const port = 3002;
-    const server = new Server(url, dbConnectionString, port);
+    server = new Server(url, dbConnectionString, port);
+    return server.start();
+});
 
-    return server.start()
-        .then(() => {
-            return gulp.src('./test/browser/*.js', { read: false })
-                .pipe(mocha({
-                    reporter: 'nyan',
-                    timeout: 10000,
-                }));
+gulp.task('test-server:stop', () => {
+    return server.stop();
+});
+
+gulp.task('test:browser', ['test-server:start'], () => {
+    return gulp.src('./test/browser/*.js', { read: false })
+        .pipe(mocha({
+            reporter: 'nyan',
+            timeout: 10000,
+        }))
+        .once('end', () => {
+            gulp.start('test-server:stop');
         });
 });
 

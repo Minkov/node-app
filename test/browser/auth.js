@@ -7,13 +7,14 @@ const { setupDriver } = require('./utils/setup-driver');
 const ui = require('./shared/ui.utils');
 
 const authUtils = require('./shared/auth.utils');
+const browsers = ['chrome'];
 
 describe('Sample test', () => {
     const url = 'http://localhost:3002';
     let driver = null;
 
     beforeEach(() => {
-        driver = setupDriver(url, 'phantomjs');
+        driver = setupDriver(url, ...browsers);
 
         return driver.get(url)
             .then(() => {
