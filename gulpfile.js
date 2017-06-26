@@ -36,14 +36,10 @@ gulp.task('test:browser', () => {
     const dbConnectionString = 'mongodb://localhost/todos-app-test';
     const port = 3002;
     const server = new Server(url, dbConnectionString, port);
-    gulp.on('finish', () => {
-        server.stop();
-        console.log(' --- Closed ---');
-    });
 
     return server.start()
         .then(() => {
-            return gulp.src('./test/browser/**.js', { read: false })
+            return gulp.src('./test/browser/*.js', { read: false })
                 .pipe(mocha({
                     reporter: 'nyan',
                     timeout: 10000,

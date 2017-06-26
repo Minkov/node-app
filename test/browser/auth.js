@@ -4,8 +4,6 @@ const async = require('../../utils/async');
 
 const { setupDriver } = require('./utils/setup-driver');
 
-const { Server } = require('./utils/setup-server');
-
 const ui = require('./shared/ui.utils');
 
 const authUtils = require('./shared/auth.utils');
@@ -15,7 +13,7 @@ describe('Sample test', () => {
     let driver = null;
 
     beforeEach(() => {
-        driver = setupDriver(url, 'firefox');
+        driver = setupDriver(url, 'phantomjs');
 
         return driver.get(url)
             .then(() => {

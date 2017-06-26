@@ -19,6 +19,7 @@
     "cookie-parser": "^1.4.3",
     "express": "^4.15.3",
     "express-session": "^1.15.3",
+    "g": "^2.0.1",
     "gulp-env": "^0.4.0",
     "gulp-eslint": "^4.0.0",
     "jquery": "^3.2.1",
@@ -28,7 +29,8 @@
     "passport-local": "^1.0.0",
     "pug": "^2.0.0-rc.2",
     "selenium-webdriver": "^3.4.0",
-    "session": "^0.1.0"
+    "session": "^0.1.0",
+    "yarn": "^0.24.5"
   },
   "devDependencies": {
     "@types/webdriverio": "^4.7.1",
