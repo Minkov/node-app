@@ -18,10 +18,12 @@ describe('TODO\'s tests', () => {
     beforeEach(() => {
         driver = setupDriver(url, ...browsers);
 
+        const user = authUtils.getRandomUser();
+
         return driver.get(url)
-            .then(() => {
-                return ui.setDriver(driver);
-            });
+            .then(() => ui.setDriver(driver))
+            .then(() => authUtils.signUpUser(user.username, user.password))
+            .then(() => authUtils.signInUser(user.username, user.password));
     });
 
     afterEach(() => {
@@ -32,11 +34,6 @@ describe('TODO\'s tests', () => {
         it('to redirect to TODO details', () => {
             const text = 'It works!';
             return async()
-                .then(() => {
-                    return async()
-                        .then(() => authUtils.signUpUser('C0ki', 'Sk0k1'))
-                        .then(() => authUtils.signInUser('C0ki', 'Sk0k1'));
-                })
                 .then(() => todoUtils.createTODO(text))
                 .then(() => Promise.all([
                     ui.getSelected('input'),
@@ -56,11 +53,6 @@ describe('TODO\'s tests', () => {
                 .map((_, index) => 'Todo ' + (index + 1));
 
             return async()
-                .then(() => {
-                    return async()
-                        .then(() => authUtils.signUpUser('C0ki', 'Sk0k1'))
-                        .then(() => authUtils.signInUser('C0ki', 'Sk0k1'));
-                })
                 .then(() => {
                     return texts.reduce((p, text) => {
                         return p.then(() =>
@@ -82,11 +74,6 @@ describe('TODO\'s tests', () => {
         it('to redirect to TODO details', () => {
             let text = null;
             return async()
-                .then(() => {
-                    return async()
-                        .then(() => authUtils.signUpUser('C0ki', 'Sk0k1'))
-                        .then(() => authUtils.signInUser('C0ki', 'Sk0k1'));
-                })
                 .then(() => todoUtils.createTODO('Sample TODO'))
                 .then(() => ui.click('#nav-todos .toggle'))
                 .then(() => ui.click('#nav-todos-all'))
@@ -96,8 +83,8 @@ describe('TODO\'s tests', () => {
                 })
                 .then(() => ui.click('.todo-item'))
                 .then(() => Promise.all([
-                        ui.getSelected('input[type="checkbox"]'),
-                        ui.getText('h1'),
+                    ui.getSelected('input[type="checkbox"]'),
+                    ui.getText('h1'),
                 ]))
                 .then(([isSelected, elText]) => {
                     expect(isSelected).to.equal(false);

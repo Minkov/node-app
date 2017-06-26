@@ -21,10 +21,20 @@ const signInUser = (username, password) => {
         .then(() => ui.click('form button'));
 };
 
+const getRandomUser = () => {
+    const username = 'Coki-' + parseInt(Math.random() * (1 << 20), 10);
+    const password = '123456qw';
+    return {
+        username,
+        password,
+    };
+};
+
 module.exports = {
     setBrowser(_browser) {
         browser = _browser;
         ui.setBrowser(browser);
     },
     signInUser, signUpUser,
+    getRandomUser,
 };
