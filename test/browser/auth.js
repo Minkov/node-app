@@ -7,7 +7,7 @@ const { setupDriver } = require('./utils/setup-driver');
 const ui = require('./shared/ui.utils');
 
 const authUtils = require('./shared/auth.utils');
-const browsers = ['chrome'];
+const browsers = ['phantomjs'];
 
 describe('Sample test', () => {
     const url = 'http://localhost:3002';

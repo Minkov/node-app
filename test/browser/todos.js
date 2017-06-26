@@ -1,4 +1,3 @@
-/* globals global */
 const { expect } = require('chai');
 
 const async = require('../../utils/async');
@@ -9,7 +8,7 @@ const ui = require('./shared/ui.utils');
 
 const authUtils = require('./shared/auth.utils');
 const todoUtils = require('./shared/todo.utils');
-const browsers = ['chrome'];
+const browsers = ['phantomjs'];
 
 describe('TODO\'s tests', () => {
     let driver = null;
