@@ -26,9 +26,9 @@ describe('Test 1', () => {
             .then(() => done());
     });
 
-    it('Simple get', (done) => {
+    it('GET /todos', (done) => {
         request(app)
-            .get('/')
+            .get('/todos')
             .expect(200)
             .end((err, res) => {
                 if (err) {
@@ -39,7 +39,7 @@ describe('Test 1', () => {
             });
     });
 
-    it('Simple post', (done) => {
+    it('POST /todos', (done) => {
         request(app)
             .post('/todos')
             .type('form')
