@@ -7,7 +7,7 @@ const sinon = require('sinon');
 const { expect } = require('chai');
 const { getRequestMock, getResponseMock } = require('../../mocks/req-res');
 
-describe.skip('TODO\' controller create()', () => {
+describe('TODO\' controller create()', () => {
     let controller = null;
 
     let req = null;
@@ -19,9 +19,6 @@ describe.skip('TODO\' controller create()', () => {
 
     beforeEach(() => {
         controller = getController(data);
-
-        req = getRequestMock({ params: {} });
-        res = getResponseMock();
     });
 
     describe('when TODO is available', () => {
@@ -31,6 +28,9 @@ describe.skip('TODO\' controller create()', () => {
         };
 
         describe('and is valid', () => {
+            req = getRequestMock({ body: todo });
+            res = getResponseMock();
+
             beforeEach(() => {
                 sinon.stub(data, 'create')
                     .callsFake(() => {
@@ -42,37 +42,36 @@ describe.skip('TODO\' controller create()', () => {
                 data.create.restore();
             });
 
-            it('expect to redirect to `/todos/details/1`', () => {
+            it('expect to redirect to `/todos/1`', () => {
                 return controller.create(req, res)
                     .then(() => {
-                        expect(res.viewName).to.eql('todos/details');
-                        expect(res.model).to.eql({ context: item });
+                        expect(res.redirectUrl)
+                            .to
+                            .eql('/todos/' + todo.id);
                     });
             });
         });
     });
 
     describe('when TODO is not available', () => {
-        describe('expect to /todos/form', () => {
-            beforeEach(() => {
-                sinon.stub(data, 'getById')
-                    .callsFake(() => {
-                        return Promise.resolve(item);
-                    });
-            });
+        beforeEach(() => {
+            req = getRequestMock();
+            res = getResponseMock();
+            sinon.stub(data, 'create')
+                .callsFake(() => {
+                    return Promise.resolve(null);
+                });
+        });
 
-            afterEach(() => {
-                data.getById.restore();
-            });
+        afterEach(() => {
+            data.create.restore();
+        });
 
-            it('expect to render `todos/details` view', () => {
-                return controller.getDetails(req, res)
-                    .then(() => {
-                        expect(res.viewName).to.eql('todos/details');
-                        expect(res.model).to.eql({ context: item });
-                    });
-            });
+        it('expect to redirect to /todos/form', () => {
+            return controller.create(req, res)
+                .then(() => {
+                    expect(res.redirectUrl).to.eql('/todos/form');
+                });
         });
     });
-
 });

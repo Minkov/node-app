@@ -25,8 +25,14 @@ const getResponseMock = () => {
             this.body = body;
             return this;
         },
-        redirect(url) {
-            this.redirectUrl = url;
+        redirect(status, url) {
+            if (!url) {
+                this.redirectUrl = status;
+            } else {
+                this.redirectUrl = url;
+                this.status = status;
+            }
+
             return this;
         },
     };

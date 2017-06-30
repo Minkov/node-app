@@ -29,7 +29,8 @@ const getController = (data) => {
             const todo = req.body;
 
             if (!isValid(todo)) {
-                return res.redirect(400, '/form');
+                return Promise.resolve()
+                    .then(() => res.redirect(400, '/todos/form'));
             }
 
             return data.create(todo.text)
