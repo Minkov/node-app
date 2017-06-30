@@ -14,8 +14,12 @@ const getController = (data) => {
                 });
         },
         getDetails(req, res) {
-            data.getById(req.params.id)
+            return data.getById(req.params.id)
                 .then((todo) => {
+                    if (!todo) {
+                        return res.redirect('/todos/all');
+                    }
+
                     return res.render('todos/details', {
                         context: todo,
                     });
