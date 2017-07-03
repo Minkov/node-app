@@ -1,8 +1,9 @@
 const session = require('express-session');
 const passport = require('passport');
 const { Strategy } = require('passport-local');
+const MongoStore = require('connect-mongo')(session);
 
-module.exports = (app, { auth }, secret) => {
+module.exports = (app, { auth }, db, secret) => {
     passport.use(new Strategy((username, password, done) => {
         auth.findBy({ username: username })
             .then((user) => {
@@ -23,6 +24,7 @@ module.exports = (app, { auth }, secret) => {
     }));
 
     app.use(session({
+        store: new MongoStore({ db }),
         secret,
         resave: true,
         saveUninitialized: true,

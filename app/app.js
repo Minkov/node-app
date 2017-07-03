@@ -16,7 +16,7 @@ module.exports = {
             .then((db) => {
                 const data = initData(db);
 
-                require('./auth')(app, data, 'Purple Unicorn');
+                require('./auth')(app, data, db, 'Purple Unicorn');
 
                 routers.attachTo(app, data);
 

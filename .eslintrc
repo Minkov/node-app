@@ -18,7 +18,7 @@
         "no-use-before-define": 0,
         "quotes": 2,
         "no-cond-assign": 2, // disallow assignment in conditional expressions
-        "no-console": 0, // disallow use of console (off by default in the node environment)
+        "no-console": 2, // disallow use of console (off by default in the node environment)
         "no-constant-condition": 2, // disallow use of constant expressions in conditions
         "no-control-regex": 2, // disallow control characters in regular expressions
         "no-debugger": 2, // disallow use of debugger
@@ -53,7 +53,7 @@
         "eqeqeq": 2, // require the use of === and !==
         "guard-for-in": 2, // make sure for-in loops have an if statement (off by default)
         "no-alert": 2, // disallow the use of alert, confirm, and prompt
-        "no-caller": 2, // disallow use of arguments.caller or arguments.callee
+        "no-caller": 2, // disallow use of arguments.caller or arguments.callee        
         "no-div-regex": 2, // disallow division operators explicitly at beginning of regular expression (off by default)
         "no-else-return": 2, // disallow else after a return in an if (off by default)
         "no-labels": 2, // disallow use of labels for anything other then loops and switches

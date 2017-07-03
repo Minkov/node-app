@@ -1,3 +1,2 @@
-wdio.conf.js
-
-app/static
+static
+coverage
