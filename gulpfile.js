@@ -2,6 +2,7 @@ const gulp = require('gulp');
 const gulpsync = require('gulp-sync')(gulp);
 
 const mocha = require('gulp-mocha');
+const istanbul = require('gulp-istanbul');
 
 const eslint = require('gulp-eslint');
 
@@ -16,19 +17,36 @@ gulp.task('lint', () => {
         .pipe(eslint.failAfterError());
 });
 
-gulp.task('test:unit', () => {
-    return gulp.src('./test/unit/**/*.js', { read: false })
-        .pipe(mocha({
-            reporter: 'nyan',
-        }));
+gulp.task('pre-test', () => {
+    return gulp.src(['./app/**/*.js'])
+        // Covering files
+        .pipe(istanbul({
+            includeUntested: true,
+        }))
+        // Force `require` to return covered files
+        .pipe(istanbul.hookRequire());
 });
 
-gulp.task('test:integration', () => {
-    return gulp.src('./test/unit/**/*.js', { read: false })
-        .pipe(mocha({
-            reporter: 'nyan',
-        }));
+gulp.task('test:unit', ['pre-test'], () => {
+    return gulp.src(['./test/unit/**/*.js', './test/integration/**/*.js'])
+        .pipe(mocha({ reporter: 'dot' }))
+        .pipe(istanbul.writeReports())
+        .pipe(istanbul.enforceThresholds({ thresholds: { global: 90 } }));
 });
+
+// gulp.task('test:unit', ['pre-test'], () => {
+//     return gulp.src(['./test/integration/**/*.js'])
+//         .pipe(mocha({ reporter: 'dot' }))
+//         .pipe(istanbul.writeReports())
+//         .pipe(istanbul.enforceThresholds({ thresholds: { global: 90 } }));
+// });
+
+// gulp.task('test:integration', () => {
+//     return gulp.src('./test/unit/**/*.js', { read: false })
+//         .pipe(mocha({
+//             reporter: 'nyan',
+//         }));
+// });
 
 const { Server } = require('./test/browser/utils/setup-server');
 let server = null;
@@ -57,5 +75,5 @@ gulp.task('test:browser', ['test-server:start'], () => {
 });
 
 gulp.task('test', gulpsync.sync([
-    'lint', 'test:unit', 'test:integration', 'test:browser',
+    'lint', 'test:unit', 'test:browser',
 ]));

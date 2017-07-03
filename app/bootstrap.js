@@ -13,7 +13,7 @@ const bootstrapApp = () => {
     app.set('view engine', 'pug');
     app.use(bodyParser.urlencoded({ extended: false }));
 
-    app.use('/static', express.static(path.join(__dirname, 'static')));
+    app.use('/static', express.static(path.join(__dirname, '../static')));
     app.use('/libs', express.static(
         path.join(__dirname, '../node_modules')));
     app.use(cookieParser());

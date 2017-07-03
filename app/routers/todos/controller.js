@@ -1,6 +1,7 @@
 const isValid = (item) => {
     return typeof item !== 'undefined' &&
-        typeof item.text === 'string';
+        typeof item.text === 'string' &&
+        item.text.length > 3;
 };
 
 const getController = (data) => {

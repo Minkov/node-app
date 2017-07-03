@@ -22,16 +22,18 @@ describe('TODO\' controller create()', () => {
     });
 
     describe('when TODO is available', () => {
-        const todo = {
-            id: 1,
-            text: 'TODO text',
-        };
+        let todo = null;
 
         describe('and is valid', () => {
-            req = getRequestMock({ body: todo });
-            res = getResponseMock();
-
             beforeEach(() => {
+                todo = {
+                    id: 1,
+                    text: 'TODO text',
+                };
+
+                req = getRequestMock({ body: todo });
+                res = getResponseMock();
+
                 sinon.stub(data, 'create')
                     .callsFake(() => {
                         return Promise.resolve(todo);
@@ -39,6 +41,9 @@ describe('TODO\' controller create()', () => {
             });
 
             afterEach(() => {
+                todo = null;
+                req = null;
+                res = null;
                 data.create.restore();
             });
 
@@ -48,6 +53,38 @@ describe('TODO\' controller create()', () => {
                         expect(res.redirectUrl)
                             .to
                             .eql('/todos/' + todo.id);
+                    });
+            });
+        });
+        describe('and is invalid', () => {
+            beforeEach(() => {
+                todo = {
+                    id: 1,
+                    text: 't',
+                };
+
+                req = getRequestMock({ body: todo });
+                res = getResponseMock();
+
+                sinon.stub(data, 'create')
+                    .callsFake(() => {
+                        return Promise.resolve(todo);
+                    });
+            });
+
+            afterEach(() => {
+                todo = null;
+                req = null;
+                res = null;
+                data.create.restore();
+            });
+
+            it('expect to redirect to `/todos/form`', () => {
+                return controller.create(req, res)
+                    .then(() => {
+                        expect(res.redirectUrl)
+                            .to
+                            .eql('/todos/form');
                     });
             });
         });
