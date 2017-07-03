@@ -7,6 +7,8 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const flash = require('connect-flash');
 
+const logger = require('./logger/');
+
 const bootstrapApp = () => {
     const app = express();
 
@@ -17,6 +19,9 @@ const bootstrapApp = () => {
     app.use('/static', express.static(path.join(__dirname, '../static')));
     app.use('/libs', express.static(
         path.join(__dirname, '../node_modules')));
+
+    logger.attachTo(app);
+
     app.use(cookieParser());
     // app.use(flash());
 

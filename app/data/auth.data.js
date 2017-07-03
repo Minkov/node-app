@@ -8,13 +8,13 @@ const getData = (db) => {
         },
         getById(id) {
             return collection.findOne({ _id: new ObjectID(id) })
-                .then((todo) => {
-                    if (!todo) {
+                .then((user) => {
+                    if (!user) {
                         return null;
                     }
 
-                    todo.id = todo._id;
-                    return todo;
+                    user.id = user._id;
+                    return user;
                 });
         },
         create(username, password) {

@@ -18,12 +18,15 @@ const getController = (data) => {
             return data.getById(req.params.id)
                 .then((todo) => {
                     if (!todo) {
-                        return res.redirect('/todos/all');
+                        return res.redirect(404, '/todos/all');
                     }
 
                     return res.render('todos/details', {
                         context: todo,
                     });
+                })
+                .catch((err) => {
+                    return res.redirect(404, '/todos/all');
                 });
         },
         create(req, res) {

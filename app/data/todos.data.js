@@ -14,15 +14,19 @@ const getData = (db) => {
                 });
         },
         getById(id) {
-            return collection.findOne({ _id: new ObjectID(id) })
-                .then((todo) => {
-                    if (!todo) {
-                        return null;
-                    }
+            try {
+                return collection.findOne({ _id: new ObjectID(id) })
+                    .then((todo) => {
+                        if (!todo) {
+                            return null;
+                        }
 
-                    todo.id = todo._id;
-                    return todo;
-                });
+                        todo.id = todo._id;
+                        return todo;
+                    });
+            } catch (err) {
+                return Promise.reject('Invalid id');
+            }
         },
         create(text) {
             const todo = {

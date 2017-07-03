@@ -5,7 +5,7 @@ const fs = require('fs');
 
 const morgan = require('morgan');
 
-const attachTo = (app, config) => {
+const attachTo = (app, config = {}) => {
     const logDirectory = config.logDirectory || path.join(__dirname, 'log');
 
     if (!fs.existsSync(logDirectory)) {

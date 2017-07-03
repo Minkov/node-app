@@ -81,6 +81,19 @@ describe('Integration /todos', () => {
                 });
         });
 
+        it('GET /todos/:id, when no TODO with this id', (done) => {
+            request(app)
+                .get('/todos/' + todos[0]._id + 1)
+                .expect(404)
+                .end((err, res) => {
+                    if (err) {
+                        return done(err);
+                    }
+
+                    return done();
+                });
+        });
+
         it('GET /todos/form', (done) => {
             request(app)
                 .get('/todos/form')

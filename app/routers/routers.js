@@ -18,10 +18,6 @@ const attachTo = (app, data) => {
                     : ('/' + dir.name);
             app.use(prefix, initRouter(data));
         });
-
-    app.get('/', (req, res) => {
-        res.redirect('/home');
-    });
 };
 
 module.exports = { attachTo };
